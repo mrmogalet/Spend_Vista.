@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spend Vista | Personal Finance Manager</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar Navigation -->
+        <div class="sidebar">
+            <div class="logo">
+                <div class="logo-icon">SV</div>
+                <div class="logo-text">Spend Vista</div>
+            </div>
+            <div class="nav-links">
+                <a href="#" class="nav-link active" data-page="dashboard">
+                    <i>📊</i> Dashboard
+                </a>
+                <a href="#" class="nav-link" data-page="budget">
+                    <i>💰</i> Budget Tracker
+                </a>
+                <a href="#" class="nav-link" data-page="emergency">
+                    <i>🛡️</i> Emergency Fund
+                </a>
+                <a href="#" class="nav-link" data-page="goals">
+                    <i>🎯</i> Savings Goals
+                </a>
+                <a href="#" class="nav-link" data-page="reports">
+                    <i>📈</i> Reports
+                </a>
+                <a href="#" class="nav-link" data-page="about">
+                    <i>⚙️</i> About & Settings
+                </a>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Dashboard Page -->
+            <div class="page active" id="dashboard">
+                <div class="page-header">
+                    <h1 class="page-title">Dashboard</h1>
+                    <p class="page-description">Your financial overview at a glance</p>
+                </div>
+
+                <div class="summary-cards">
+                    <div class="summary-card">
+                        <div class="summary-card-title">Current Balance</div>
+                        <div class="summary-card-value" id="current-balance">R 0.00</div>
+                    </div>
+                    <div class="summary-card">
+                        <div class="summary-card-title">Monthly Income</div>
+                        <div class="summary-card-value summary-card-positive" id="monthly-income">R 0.00</div>
+                    </div>
+                    <div class="summary-card">
+                        <div class="summary-card-title">Monthly Expenses</div>
+                        <div class="summary-card-value summary-card-negative" id="monthly-expenses">R 0.00</div>
+                    </div>
+                    <div class="summary-card">
+                        <div class="summary-card-title">Budget Remaining</div>
+                        <div class="summary-card-value summary-card-neutral" id="budget-remaining">R 0.00</div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Recent Transactions</h2>
+                    </div>
+                    <ul class="transaction-list" id="recent-transactions">
+                        <!-- Transactions will be added here dynamically -->
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Add Transaction</h2>
+                    </div>
+                    <form id="transaction-form">
+                        <div class="form-group">
+                            <label class="form-label" for="transaction-type">Type</label>
+                            <select class="form-control" id="transaction-type" required>
+                                <option value="income">Income</option>
+                                <option value="expense">Expense</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="transaction-name">Description</label>
+                            <input type="text" class="form-control" id="transaction-name" placeholder="Enter description" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="transaction-amount">Amount (ZAR)</label>
+                            <input type="number" class="form-control" id="transaction-amount" placeholder="0.00" min="0.01" step="0.01" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="transaction-date">Date</label>
+                            <input type="date" class="form-control" id="transaction-date" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Add Transaction</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Budget Tracker Page -->
+            <div class="page" id="budget">
+                <div class="page-header">
+                    <h1 class="page-title">Budget Tracker</h1>
+                    <p class="page-description">Set and monitor your monthly spending limits</p>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Monthly Budget</h2>
+                    </div>
+                    <div class="progress-container">
+                        <div class="progress-label">
+                            <span>Budget Usage</span>
+                            <span id="budget-percentage">0%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill progress-budget" id="budget-progress" style="width: 0%"></div>
+                        </div>
+                        <div class="progress-label">
+                            <span>Used: <span id="budget-used">R 0.00</span></span>
+                            <span>Remaining: <span id="budget-remaining-display">R 0.00</span></span>
+                        </div>
+                    </div>
+                    <form id="budget-form">
+                        <div class="form-group">
+                            <label class="form-label" for="monthly-budget">Monthly Budget (ZAR)</label>
+                            <input type="number" class="form-control" id="monthly-budget" placeholder="0.00" min="0" step="0.01">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Update Budget</button>
+                    </form>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Budget Status</h2>
+                    </div>
+                    <div id="budget-status">
+                        <!-- Budget status message will appear here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Emergency Fund Page -->
+            <div class="page" id="emergency">
+                <div class="page-header">
+                    <h1 class="page-title">Emergency Fund</h1>
+                    <p class="page-description">Build your financial safety net</p>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Emergency Fund Goal</h2>
+                    </div>
+                    <div class="progress-container">
+                        <div class="progress-label">
+                            <span>Progress</span>
+                            <span id="emergency-percentage">0%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill progress-emergency" id="emergency-progress" style="width: 0%"></div>
+                        </div>
+                        <div class="progress-label">
+                            <span>Saved: <span id="emergency-saved">R 0.00</span></span>
+                            <span>Target: <span id="emergency-target">R 0.00</span></span>
+                        </div>
+                    </div>
+                    <form id="emergency-form">
+                        <div class="form-group">
+                            <label class="form-label" for="emergency-target-input">Target Amount (ZAR)</label>
+                            <input type="number" class="form-control" id="emergency-target-input" placeholder="0.00" min="0" step="0.01">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="emergency-allocation">Allocation Percentage</label>
+                            <input type="number" class="form-control" id="emergency-allocation" placeholder="10" min="0" max="100" step="1">
+                            <small>Percentage of income to automatically allocate to emergency fund</small>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Update Goal</button>
+                    </form>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Emergency Fund Status</h2>
+                    </div>
+                    <div id="emergency-status">
+                        <!-- Emergency fund status message will appear here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Savings Goals Page -->
+            <div class="page" id="goals">
+                <div class="page-header">
+                    <h1 class="page-title">Savings Goals</h1>
+                    <p class="page-description">Plan and track your savings targets</p>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Create New Goal</h2>
+                    </div>
+                    <form id="goal-form">
+                        <div class="form-group">
+                            <label class="form-label" for="goal-name">Goal Name</label>
+                            <input type="text" class="form-control" id="goal-name" placeholder="e.g., New Laptop" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="goal-target">Target Amount (ZAR)</label>
+                            <input type="number" class="form-control" id="goal-target" placeholder="0.00" min="0.01" step="0.01" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Create Goal</button>
+                    </form>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Your Goals</h2>
+                    </div>
+                    <div id="goals-list">
+                        <!-- Goals will be added here dynamically -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Reports Page -->
+            <div class="page" id="reports">
+                <div class="page-header">
+                    <h1 class="page-title">Financial Reports</h1>
+                    <p class="page-description">Visual insights into your finances</p>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Income vs Expenses</h2>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="income-expense-chart"></canvas>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Expense Breakdown</h2>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="expense-category-chart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- About & Settings Page -->
+            <div class="page" id="about">
+                <div class="page-header">
+                    <h1 class="page-title">About & Settings</h1>
+                    <p class="page-description">Manage your app preferences</p>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">About Spend Vista</h2>
+                    </div>
+                    <p>Spend Vista is a personal finance management application designed to help you track your income, expenses, budgets, and savings goals.</p>
+                    <p>Version: 1.0.0</p>
+                    <p>Created with ❤️ for financial empowerment</p>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">App Settings</h2>
+                    </div>
+                    <div class="settings-group">
+                        <h3 class="settings-title">Dark Mode</h3>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="dark-mode-toggle">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Data Management</h2>
+                    </div>
+                    <div class="settings-group">
+                        <p>Reset all your financial data. This action cannot be undone.</p>
+                        <button class="btn btn-danger" id="reset-data">Reset All Data</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
